@@ -34,8 +34,9 @@ Branca.prototype.encode = function (message, timestamp, nonce) {
     cipher.setAAD(header);
 
     /* The final() should not return anything but include it just in case. */
+    /* Message can be a Buffer or anything Buffer.from() understands. */
     let ciphertext = Buffer.concat([
-        cipher.update(message),
+        cipher.update(Buffer.from(message)),
         cipher.final()
     ]);
 
@@ -72,7 +73,7 @@ Branca.prototype.decode = function (token, ttl) {
         }
     }
 
-    return payload.toString();
+    return payload;
 };
 
 module.exports = function(key) {

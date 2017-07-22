@@ -11,7 +11,7 @@ test("test vector 1", function (tape) {
     tape.equal(token, "4si6Rr26CjfyVydzEiKBwuwkQwvjQhmBHTKSXAyHGcaFYA5kEp45XR1Amgblh");
 
     let message = branca.decode(token);
-    tape.equal(message, "Hello world!");
+    tape.equal(message.toString(), "Hello world!");
 });
 
 test("test vector 2", function (tape) {
