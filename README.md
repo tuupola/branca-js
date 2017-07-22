@@ -95,8 +95,8 @@ You can keep the token size small by using a space efficient serialization metho
 const key = "supersecretkeyyoushouldnotcommit";
 const branca = require("branca")(key);
 const msgpack = require("msgpack5")();
+
 const packed = msgpack.encode({"scope": ["read", "write", "delete"]});
-const test = msgpack.decode(packed);
 const token = branca.encode(packed);
 /* 2EZpnHNCn1qwjqalGcpnZ2tlpXtIqNYNqeZuQvKzz6TY8nIh1Pukl8R7ZNIFvH28ZICIi9gkikjsHaPg */
 
