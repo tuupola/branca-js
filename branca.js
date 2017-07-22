@@ -53,6 +53,14 @@ Branca.prototype.decode = function (token, ttl = null) {
     let payload = decipher.update(ciphertext);
     decipher.final();
 
+    if (null !== ttl) {
+        let future = timestamp + ttl;
+        let unixtime = Math.round(Date.now() / 1000);
+        if (future < unixtime) {
+            throw new Error("Token is expired.");
+        }
+    }
+
     return payload.toString();
 };
 

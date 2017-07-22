@@ -13,3 +13,14 @@ test("test vector 1", function (tape) {
     let message = branca.decode(token);
     tape.equal(message, "Hello world!");
 });
+
+test("test vector 2", function (tape) {
+    tape.plan(2);
+
+    let token = branca.encode("Hello world!", 123206400, nonce);
+    tape.equal(token, "4si6Rr26CjfyVydzEiKBwuwkQwvjQhmBHTKSXAyHGcaFYA5kEp45XR1Amgblh");
+
+    tape.throws(function () {
+        let message = branca.decode(token, 3600);
+    }, Error)
+});
