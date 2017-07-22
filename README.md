@@ -22,9 +22,9 @@ $ npm install branca
 
 ## Token Format
 
-A Branca token is a base62 encoded concatenation of a header, ciphertext and MAC.
-Header consists of version, timestamp and nonce. Putting them all together we get the
-structure below.
+A Branca token is a base62 encoded concatenation of a header, ciphertext and
+authentication tag (MAC). Header consists of version, timestamp and nonce.
+Putting them all together we get the structure below.
 
 ```
 Version || Timestamp || Nonce || Ciphertext || MAC
@@ -33,8 +33,8 @@ Version || Timestamp || Nonce || Ciphertext || MAC
 ### Version
 
 Version is 8 bits ie. one byte. Currently the only version is `0xBA`. This is a
-magic byte you can use to quickly identify a given token. Version number guarantees
-the token format and encryption algorithm.
+magic byte which you can use to quickly identify a given token. Version number
+guarantees the token format and encryption algorithm.
 
 ### Timestamp
 
@@ -55,7 +55,10 @@ authenticated. In laymans terms, header can be seen but it cannot be tampered.
 
 ### MAC
 
-The authentication tag is 128 bits ie. 16 bytes. This is the [Poly1305](https://en.wikipedia.org/wiki/Poly1305) message authentication code (MAC). It is used to make sure that the message, as well as the non-encrypted header has not been tampered with.
+The authentication tag is 128 bits ie. 16 bytes. This is the
+[Poly1305](https://en.wikipedia.org/wiki/Poly1305) message authentication
+code (MAC). It is used to make sure that the message, as well as the
+non-encrypted header has not been tampered with.
 
 ## Usage
 
@@ -107,7 +110,7 @@ const payload = msgpack.decode(Buffer.from(binary));
 
 ## Testing
 
-You can run tests either manually with the following command.
+You can run tests manually with the following command.
 
 ``` bash
 $ node test.js
