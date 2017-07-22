@@ -1,6 +1,6 @@
 {
   "name": "branca",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Authenticated Encrypted API Tokens for Node.js (IETF ChaCha20-Poly1305)",
   "main": "branca.js",
   "repository": "https://github.com/tuupola/branca-js",
@@ -14,9 +14,10 @@
     "chacha": "^2.1.0"
   },
   "devDependencies": {
+    "istanbul": "^0.4.5",
     "tape": "^4.7.0"
   },
   "scripts": {
-    "test": "node test.js"
+    "test": "node_modules/istanbul/lib/cli.js cover node_modules/tape/bin/tape test.js"
   }
 }
