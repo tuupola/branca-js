@@ -24,3 +24,11 @@ test("test vector 2", function (tape) {
         let message = branca.decode(token, 3600);
     }, Error)
 });
+
+test("test defaults", function (tape) {
+    tape.plan(1);
+
+    let token = branca.encode("Hello world!");
+    let message = branca.decode(token);
+    tape.equal(message.toString(), "Hello world!");
+});
