@@ -71,10 +71,17 @@ const key = "supersecretkeyyoushouldnotcommit";
 const branca = require("branca")(key);
 
 const token = branca.encode("tuupola@appelsiini.net");
-/* 87x2GqCUw7fho4DVETyEPrv8s79gbfRIZB3ql5nliJ42xNNA88VQm7MZZzZs07O8zMC9vke0XuMxb */
+console.log(token);
+
+/*
+TYfc6x7g8HiQf9HMkPwXC33UKwESCiBHrnVbb6AjDTaRR5oDxt3bK8kyiEyyc8HDqfnukQlMHT
+*/
 
 const payload = branca.decode(token);
+console.log(payload.toString());
+
 /* tuupola@appelsiini.net */
+
 ```
 
 Sometimes you might prefer JSON.
@@ -84,12 +91,15 @@ const key = "supersecretkeyyoushouldnotcommit";
 const branca = require("branca")(key);
 const json = JSON.stringify({"scope": ["read", "write", "delete"]});
 const token = branca.encode(json);
+console.log(token);
 
 /*
-3Gq55EruBIu2KtWGtzjjkMV45e1froWhTDF8nNNTbnwHvOeGHNHNEuBuyrGqFtEn4faf26LAuVUzijMNaO1Fk72aZ3B5
+3Gq57osRXk7UsZsqzLuLOoHYj2VgrGvhkETjZ4J1ftW7zhALYFUol2jDyxYtmrqJfi5DbKx7BqIptfeaoN2yadmJxSIx
 */
 
 const payload = JSON.parse(branca.decode(token));
+console.log(payload);
+
 /* { scope: [ 'read', 'write', 'delete' ] } */
 ```
 
@@ -102,10 +112,16 @@ const msgpack = require("msgpack5")();
 
 const packed = msgpack.encode({"scope": ["read", "write", "delete"]});
 const token = branca.encode(packed);
-/* 2EZpnHNCn1qwjqalGcpnZ2tlpXtIqNYNqeZuQvKzz6TY8nIh1Pukl8R7ZNIFvH28ZICIi9gkikjsHaPg */
+console.log(token);
+
+/*
+2EZpow8Nwk6Z9UxMel3kzFUe5boHV480zwkZDp6hNgaatnOCt4YbqgCRICKnm7IfJgxzQpT9eYdrTzyb
+*/
 
 const binary = branca.decode(token);
 const payload = msgpack.decode(Buffer.from(binary));
+console.log(payload);
+
 /* { scope: [ 'read', 'write', 'delete' ] } */
 ```
 
