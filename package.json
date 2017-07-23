@@ -1,6 +1,6 @@
 {
   "name": "branca",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Authenticated Encrypted API Tokens for Node.js (IETF XChaCha20-Poly1305)",
   "main": "branca.js",
   "repository": "https://github.com/tuupola/branca-js",
