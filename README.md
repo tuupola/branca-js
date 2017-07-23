@@ -1,6 +1,6 @@
 #  Branca
 
-[![Latest Version](https://img.shields.io/npm/v/branca-js.svg?style=flat-square)](https://www.npmjs.com/package/branca)
+[![Latest Version](https://img.shields.io/npm/v/branca.svg?style=flat-square)](https://www.npmjs.com/package/branca)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/tuupola/branca-js/master.svg?style=flat-square)](https://travis-ci.org/tuupola/branca-js)[![Coverage](http://img.shields.io/codecov/c/github/tuupola/branca-js.svg?style=flat-square)](https://codecov.io/github/tuupola/branca-js)
 
