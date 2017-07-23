@@ -1,7 +1,7 @@
 {
   "name": "branca",
   "version": "0.1.0",
-  "description": "Authenticated Encrypted API Tokens for Node.js (IETF ChaCha20-Poly1305)",
+  "description": "Authenticated Encrypted API Tokens for Node.js (IETF XChaCha20-Poly1305)",
   "main": "branca.js",
   "repository": "https://github.com/tuupola/branca-js",
   "homepage": "https://github.com/tuupola/branca-js",
@@ -11,7 +11,7 @@
   "dependencies": {
     "base-x": "^3.0.2",
     "bufferpack": "^0.0.6",
-    "chacha": "^2.1.0"
+    "libsodium-wrappers": "^0.5.2"
   },
   "devDependencies": {
     "istanbul": "^0.4.5",
