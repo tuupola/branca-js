@@ -7,10 +7,14 @@
 
 ## What?
 
-Branca allows you to generate and verify encrypted authentication tokens. It
-defines the external format and encryption scheme of the token. Branca is based on
-[Fernet specification](https://github.com/fernet/spec/blob/master/Spec.md). Payload in Branca token is an arbitrary sequence of bytes. Payload can be for example
-a JSON object, plain text string or even binary data serialized by [MessagePack](http://msgpack.org/) or [Protocol Buffers](https://developers.google.com/protocol-buffers/).
+Branca allows you to generate and verify encrypted API tokens.
+This specification defines the external format and encryption scheme of the
+token to help interoperability between userland implementations. Branca is closely
+based on [Fernet specification](https://github.com/fernet/spec/blob/master/Spec.md).
+
+Payload in Branca token is an arbitrary sequence of bytes. This means payload can
+be for example a JSON object, plain text string or even binary data serialized
+by [MessagePack](http://msgpack.org/) or [Protocol Buffers](https://developers.google.com/protocol-buffers/).
 
 ## Install
 
@@ -20,46 +24,6 @@ Install the library using [Yarn](https://yarnpkg.com/en/) or [npm](https://www.n
 $ yarn add branca
 $ npm install branca
 ```
-
-## Token Format
-
-A Branca token is a base62 encoded concatenation of a header, ciphertext and
-authentication tag (MAC). Header consists of version, timestamp and nonce.
-Putting them all together we get the structure below.
-
-```
-Version || Timestamp || Nonce || Ciphertext || MAC
-```
-
-### Version
-
-Version is 8 bits ie. one byte. Currently the only version is `0xBA`. This is a
-magic byte which you can use to quickly identify a given token. Version number
-guarantees the token format and encryption algorithm.
-
-### Timestamp
-
-Timestamp is 32 bits ie. standard 4 byte UNIX timestamp.
-
-### Nonce
-
-Nonce is 96 bits ie. 12 bytes. These should be cryptographically secure random bytes
-and never reused between tokens.
-
-### Ciphertext
-
-Payload is encrypted and authenticated using [IETF ChaCha20-Poly1305](https://download.libsodium.org/doc/secret-key_cryptography/chacha20-poly1305.html).
-Note that this is Authenticated Encryption with Additional Data (AEAD) where the
-he header part of the token is the additional data. This means the data in the
-header (`version`, `timestamp` and `nonce`) is not encrypted, it is only
-authenticated. In laymans terms, header can be seen but it cannot be tampered.
-
-### MAC
-
-The authentication tag is 128 bits ie. 16 bytes. This is the
-[Poly1305](https://en.wikipedia.org/wiki/Poly1305) message authentication
-code (MAC). It is used to make sure that the message, as well as the
-non-encrypted header has not been tampered with.
 
 ## Usage
 
@@ -132,6 +96,59 @@ You can run tests manually with the following command.
 ``` bash
 $ node test.js
 ```
+
+## Token Format
+
+Branca token consists of header, ciphertext and an authentication tag. Header
+consists of version, timestamp and nonce. Putting them all together we get
+following structure.
+
+```
+Version (1B) || Timestamp (4B) || Nonce (24B) || Ciphertext (*B) || Tag (16B)
+```
+
+String representation of the above binary token must use base62 encoding with
+the following character set.
+
+```
+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxy
+```
+
+### Version
+
+Version is 8 bits ie. one byte. Currently the only version is `0xBA`. This is a
+magic byte which you can use to quickly identify a given token. Version number
+guarantees the token format and encryption algorithm.
+
+### Timestamp
+
+Timestamp is 32 bits ie. unsigned big endian 4 byte UNIX timestamp. By having a
+timestamp instead of expiration time enables the consuming side to decide how
+long tokens are valid. You cannot accidentaly create tokens which are valid for
+the next 10 years.
+
+Storing timestamp as unsigned integer allows us to avoid 2038 problem. Unsigned
+integer overflow will happen in year 2106.
+
+### Nonce
+
+Nonce is 192 bits ie. 24 bytes. These should be cryptographically secure random
+bytes and never reused between tokens.
+
+### Ciphertext
+
+Payload is encrypted and authenticated using [IETF XChaCha20-Poly1305](https://download.libsodium.org/doc/secret-key_cryptography/xchacha20-poly1305_construction.html).
+Note that this is [Authenticated Encryption with Additional Data (AEAD)](https://tools.ietf.org/html/rfc7539#section-2.8) where the
+he header part of the token is the additional data. This means the data in the
+header (version, timestamp and nonce) is not encrypted, it is only
+authenticated. In laymans terms, header can be seen but it cannot be tampered.
+
+### Tag
+
+The authentication tag is 128 bits ie. 16 bytes. This is the
+[Poly1305](https://en.wikipedia.org/wiki/Poly1305) message authentication
+code. It is used to make sure that the payload, as well as the
+non-encrypted header has not been tampered with.
 
 ## Contributing
 
