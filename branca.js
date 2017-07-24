@@ -50,6 +50,11 @@ Branca.prototype.decode = function (token, ttl) {
     let timestamp = unpacked.shift();
     let nonce = Buffer.from(unpacked);
 
+    /* Implementation should accept only one current version. */
+    if (version !== this.version) {
+        throw new Error("Invalid token version.");
+    }
+
     /* Header was extracted from the binary token. */
 	let payload = sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(
         nonce,
@@ -65,8 +70,8 @@ Branca.prototype.decode = function (token, ttl) {
         let unixtime = Math.round(Date.now() / 1000);
         if (future < unixtime) {
             throw new Error("Token is expired.");
-        }
-    }
+        };
+    };
 
     return Buffer.from(payload);
 };
