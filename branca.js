@@ -56,7 +56,7 @@ Branca.prototype.decode = function (token, ttl) {
     }
 
     /* Header was extracted from the binary token. */
-	let payload = sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(
+    let payload = sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(
         nonce,
         ciphertext,
         header,
@@ -64,7 +64,7 @@ Branca.prototype.decode = function (token, ttl) {
         this.key
     );
 
-    /* Check for expiration only when requestested by passing in a TTL. */
+    /* Check for expiration only when requested by passing in a TTL. */
     if (undefined !== ttl) {
         let future = timestamp + ttl;
         let unixtime = Math.round(Date.now() / 1000);
