@@ -14,14 +14,12 @@ let Branca = function (key) {
     this.key = Buffer.from(key);
 };
 
-Branca.prototype.encode = function (message, timestamp, nonce) {
+Branca.prototype.encode = function (message, timestamp) {
 
-    /* Pass nonce only when testing or if you do not trust crypto. */
-    if (undefined === nonce) {
-        nonce = sodium.randombytes_buf(NONCE_BYTES);
-    }
+    /* Libsodium random is guaranteed to be random. */
+    let nonce = sodium.randombytes_buf(NONCE_BYTES);
 
-    /* Create timestamp since nothing was passed. */
+    /* Create timestamp if nothing was passed. */
     if (undefined === timestamp) {
         timestamp = Math.floor(new Date() / 1000);
     }
