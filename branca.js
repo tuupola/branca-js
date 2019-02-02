@@ -76,6 +76,16 @@ Branca.prototype.decode = function (token, ttl) {
     return Buffer.from(payload);
 };
 
+Branca.prototype.timestamp = function (token) {
+    let binary = base62.decode(token);
+    let header = binary.slice(0, HEADER_BYTES);
+    let unpacked = bufferpack.unpack(HEADER_FORMAT, header);
+    let version = unpacked.shift();
+    let timestamp = unpacked.shift();
+
+    return timestamp;
+};
+
 module.exports = function(key) {
     return new Branca(key);
 }
