@@ -7,42 +7,74 @@ const nonce = Buffer.from([
     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c
 ]);
 
-test("test token with timestamp", function (tape) {
+/* These are the tests each implementation should have. */
+
+test("test token with hello world and zero timestamp", function (tape) {
     tape.plan(2);
-
-    let token = branca.encode("Hello world!", 123206400, nonce);
-    tape.equal(
-        token,
-        "875GH233T7IYrxtgXxlQBYiFobZMQdHAT51vChKsAIYCFxZtL1evV54vYqLyZtQ0ekPHt8kJHQp0a"
-    );
-
+    let token = "870S4BYjk7NvyViEjUNsTEmGXbARAX9PamXZg0b3JyeIdGyZkFJhNsOQW6m0K9KnXt3ZUBqDB6hF4";
     let message = branca.decode(token);
+    let timestamp = branca.timestamp(token);
     tape.equal(message.toString(), "Hello world!");
+    tape.equal(timestamp, 0);
 });
 
-test("test token with zero timestamp", function (tape) {
+test("test token with hello world and max timestamp", function (tape) {
     tape.plan(2);
-
-    let token = branca.encode("Hello world!", 0, nonce);
-    tape.equal(
-        token,
-        "870S4BYX9BNSPU3Zy4DPI4MLAK67vYRwLkocJV3DlQdwxBA0ex3fwVt5lTY3viltGFdyMA1E6E3Co"
-    );
-
+    let token = "89i7YCwtsSiYfXvOKlgkCyElnGCOEYG7zLCjUp4MuDIZGbkKJgt79Sts9RdW2Yo4imonXsILmqtNb";
     let message = branca.decode(token);
+    let timestamp = branca.timestamp(token);
     tape.equal(message.toString(), "Hello world!");
+    tape.equal(timestamp, 4294967295);
+});
+
+test("test token with hello world and november 27 timestamp", function (tape) {
+    tape.plan(2);
+    let token = "875GH234UdXU6PkYq8g7tIM80XapDQOH72bU48YJ7SK1iHiLkrqT8Mly7P59TebOxCyQeqpMJ0a7a";
+    let message = branca.decode(token);
+    let timestamp = branca.timestamp(token);
+    tape.equal(message.toString(), "Hello world!");
+    tape.equal(timestamp, 123206400);
+});
+
+test("test token with eight null bytes and zero timestamp", function (tape) {
+    tape.plan(2);
+    let token = "1jIBheHWEwYIP59Wpm4QkjkIKuhc12NcYdp9Y60B6av7sZc3vJ5wBwmKJyQzGfJCrvuBgGnf";
+    let message = branca.decode(token);
+    let timestamp = branca.timestamp(token);
+    tape.equal(message.toString(), "\x00\x00\x00\x00\x00\x00\x00\x00");
+    tape.equal(timestamp, 0);
+});
+
+test("test token with eight null bytes and max timestamp", function (tape) {
+    tape.plan(2);
+    let token = "1jrx6DUq9HmXvYdmhWMhXzx3klRzhlAjsc3tUFxDPCvZZLm16GYOzsBG4KwF1djjW1yTeZ2B";
+    let message = branca.decode(token);
+    let timestamp = branca.timestamp(token);
+    tape.equal(message.toString(), "\x00\x00\x00\x00\x00\x00\x00\x00");
+    tape.equal(timestamp, 4294967295);
+});
+
+test("test token with eight null bytes and november 27 timestamp", function (tape) {
+    tape.plan(2);
+    let token = "1jJDJOEfuc4uBJh5ivaadjo6UaBZJDZ1NsWixVCz2mXw3824JRDQZIgflRqCNKz6yC7a0JKC";
+    let message = branca.decode(token);
+    let timestamp = branca.timestamp(token);
+    tape.equal(message.toString(), "\x00\x00\x00\x00\x00\x00\x00\x00");
+    tape.equal(timestamp, 123206400);
 });
 
 test("test token with wrong version", function (tape) {
     tape.plan(1);
 
     /* This is same token as above but with invalid version 0xBB. */
-    let token = "89mvl3RZe7RwH2x4azVg5V2B7X2NtG4V2YLxHAB3oFc6gyeICmCKAOCQ7Y0n08klY33eQWACd7cSZ";
+    let token = "89mvl3RkwXjpEj5WMxK7GUDEHEeeeZtwjMIOogTthvr44qBfYtQSIZH5MHOTC0GzoutDIeoPVZk3w";
 
     tape.throws(function () {
         let message = branca.decode(token);
     }, Error)
 });
+
+/* These are the JavaScript implementation specific tests. */
 
 test("test expired token", function (tape) {
     tape.plan(2);
