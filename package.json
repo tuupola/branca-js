@@ -8,6 +8,9 @@
   "bugs": "https://github.com/tuupola/branca-js/issues",
   "author": "Mika Tuupola <tuupola@appelsiini.net>",
   "license": "MIT",
+  "files": [
+    "branca.js"
+  ],
   "dependencies": {
     "base-x": "^3.0.2",
     "bufferpack": "^0.0.6",
