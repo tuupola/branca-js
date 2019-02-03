@@ -7,14 +7,7 @@
 
 ## What?
 
-Branca allows you to generate and verify encrypted API tokens.
-This specification defines the external format and encryption scheme of the
-token to help interoperability between userland implementations. Branca is closely
-based on [Fernet specification](https://github.com/fernet/spec/blob/master/Spec.md).
-
-Payload in Branca token is an arbitrary sequence of bytes. This means payload can
-be for example a JSON object, plain text string or even binary data serialized
-by [MessagePack](http://msgpack.org/) or [Protocol Buffers](https://developers.google.com/protocol-buffers/).
+[Branca](https://github.com/tuupola/branca-spec) is a secure easy to use token format which makes it hard to shoot yourself in the foot. It uses IETF XChaCha20-Poly1305 AEAD symmetric encryption to create encrypted and tamperproof tokens. Payload itself is an arbitrary sequence of bytes. You can use for example a JSON object, plain text string or even binary data serialized by [MessagePack](http://msgpack.org/) or [Protocol Buffers](https://developers.google.com/protocol-buffers/). It is possible to use [Branca as an alternative to JWT](https://appelsiini.net/2017/branca-alternative-to-jwt/).
 
 ## Install
 
