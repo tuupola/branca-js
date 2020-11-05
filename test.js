@@ -70,6 +70,15 @@ test("test token with wrong version", function (tape) {
     }, Error)
 });
 
+test("test encoding and decoding token with empty payload", function (tape) {
+    tape.plan(1);
+
+
+    let token = branca.encode("");
+    let message = branca.decode(token);
+    tape.equal(message.toString(), "");
+});
+
 /* These are the JavaScript implementation specific tests. */
 
 test("test expired token", function (tape) {
