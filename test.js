@@ -4,7 +4,6 @@ const test = require("tape");
 const branca = require("./branca")("supersecretkeyyoushouldnotcommit");
 
 /* These are the tests each implementation should have. */
-
 test("test token with hello world and zero timestamp", function (tape) {
     tape.plan(2);
     let token = "870S4BYjk7NvyViEjUNsTEmGXbARAX9PamXZg0b3JyeIdGyZkFJhNsOQW6m0K9KnXt3ZUBqDB6hF4";
@@ -70,13 +69,13 @@ test("test token with wrong version", function (tape) {
     }, Error)
 });
 
-test("test encoding and decoding token with empty payload", function (tape) {
-    tape.plan(1);
-
-
-    let token = branca.encode("");
+test("test token with empty payload and november 27 timestamp", function (tape) {
+    tape.plan(2);
+    let token = "4si6Rr2Bi1uSz6MaqF37YZVVK9VccCSWL7RkNY9gczMmYZnEXVDbzgSJLvgzs";
     let message = branca.decode(token);
+    let timestamp = branca.timestamp(token);
     tape.equal(message.toString(), "");
+    tape.equal(timestamp, 123206400);
 });
 
 /* These are the JavaScript implementation specific tests. */
@@ -97,4 +96,12 @@ test("test defaults", function (tape) {
     let token = branca.encode("Hello world!");
     let message = branca.decode(token);
     tape.equal(message.toString(), "Hello world!");
+});
+
+test("test should create token with empty payload", function (tape) {
+    tape.plan(1);
+
+    let token = branca.encode("");
+    let message = branca.decode(token);
+    tape.equal(message.toString(), "");
 });
