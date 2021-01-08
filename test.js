@@ -169,6 +169,103 @@ test("Invalid key", function (tape) {
     }, Error)
 });
 
+/* Encoding tests */
+
+test("Hello world with zero timestamp", function (tape) {
+    tape.plan(1);
+    let token = "870S4BYxgHw0KnP3W9fgVUHEhT5g86vJ17etaC5Kh5uIraWHCI1psNQGv298ZmjPwoYbjDQ9chy2z";
+    let nonce = Buffer.from("beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef", "hex");
+    let message = "Hello world!";
+    let timestamp = 0;
+
+    branca._nonce = nonce;
+
+    tape.equal(branca.encode(message, timestamp), token);
+});
+
+test("Hello world with max timestamp", function (tape) {
+    tape.plan(1);
+    let token = "89i7YCwu5tWAJNHUDdmIqhzOi5hVHOd4afjZcGMcVmM4enl4yeLiDyYv41eMkNmTX6IwYEFErCSqr";
+    let nonce = Buffer.from("beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef", "hex");
+    let message = "Hello world!";
+    let timestamp = 4294967295;
+
+    branca._nonce = nonce;
+
+    tape.equal(branca.encode(message, timestamp), token);
+});
+
+test("Hello world with November 27 timestamp", function (tape) {
+    tape.plan(1);
+    let token = "875GH23U0Dr6nHFA63DhOyd9LkYudBkX8RsCTOMz5xoYAMw9sMd5QwcEqLDRnTDHPenOX7nP2trlT";
+    let nonce = Buffer.from("beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef", "hex");
+    let message = "Hello world!";
+    let timestamp = 123206400;
+
+    branca._nonce = nonce;
+
+    tape.equal(branca.encode(message, timestamp), token);
+});
+
+test("Eight null bytes with zero timestamp", function (tape) {
+    tape.plan(1);
+    let token = "1jIBheHbDdkCDFQmtgw4RUZeQoOJgGwTFJSpwOAk3XYpJJr52DEpILLmmwYl4tjdSbbNqcF1";
+    let nonce = Buffer.from("beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef", "hex");
+    let message = Buffer.from("0000000000000000", "hex");
+    let timestamp = 0;
+
+    branca._nonce = nonce;
+
+    tape.equal(branca.encode(message, timestamp), token);
+});
+
+test("Eight null bytes with max timestamp", function (tape) {
+    tape.plan(1);
+    let token = "1jrx6DUu5q06oxykef2e2ZMyTcDRTQot9ZnwgifUtzAphGtjsxfbxXNhQyBEOGtpbkBgvIQx";
+    let nonce = Buffer.from("beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef", "hex");
+    let message = Buffer.from("0000000000000000", "hex");
+    let timestamp = 4294967295;
+
+    branca._nonce = nonce;
+
+    tape.equal(branca.encode(message, timestamp), token);
+});
+
+test("Eight null bytes with with November 27th timestamp", function (tape) {
+    tape.plan(1);
+    let token = "1jJDJOEjuwVb9Csz1Ypw1KBWSkr0YDpeBeJN6NzJWx1VgPLmcBhu2SbkpQ9JjZ3nfUf7Aytp";
+    let nonce = Buffer.from("beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef", "hex");
+    let message = Buffer.from("0000000000000000", "hex");
+    let timestamp = 123206400;
+
+    branca._nonce = nonce;
+
+    tape.equal(branca.encode(message, timestamp), token);
+});
+
+test("Empty payload", function (tape) {
+    tape.plan(1);
+    let token = "4sfD0vPFhIif8cy4nB3BQkHeJqkOkDvinI4zIhMjYX4YXZU5WIq9ycCVjGzB5";
+    let nonce = Buffer.from("beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef", "hex");
+    let message = Buffer.from("");
+    let timestamp = 0;
+
+    branca._nonce = nonce;
+
+    tape.equal(branca.encode(message, timestamp), token);
+});
+
+test("Non-UTF8 payload", function (tape) {
+    tape.plan(1);
+    let token = "K9u6d0zjXp8RXNUGDyXAsB9AtPo60CD3xxQ2ulL8aQoTzXbvockRff0y1eXoHm";
+    let nonce = Buffer.from("beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef", "hex");
+    let message = Buffer.from("80", "hex");
+    let timestamp = 123206400;
+
+    branca._nonce = nonce;
+
+    tape.equal(branca.encode(message, timestamp), token);
+});
 
 /* Implementation specific tests */
 
