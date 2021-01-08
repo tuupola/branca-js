@@ -12,12 +12,21 @@ const sodium = require("libsodium-wrappers");
 let Branca = function (key) {
     this.version = 0xBA;
     this.key = Buffer.from(key);
+    /* Used only for unit testing. */
+    this._nonce = null;
 };
 
 Branca.prototype.encode = function (message, timestamp) {
 
-    /* Libsodium random is guaranteed to be random. */
-    let nonce = sodium.randombytes_buf(NONCE_BYTES);
+    let nonce;
+
+    if (this._nonce) {
+        /* Hey you! Yes, you. Do not set nonce yourself in production. */
+        /* You will shoot yourself in the foot.*/
+        nonce = this._nonce;
+    } else {
+        nonce = sodium.randombytes_buf(NONCE_BYTES);
+    }
 
     /* Create timestamp if nothing was passed. */
     if (undefined === timestamp) {
