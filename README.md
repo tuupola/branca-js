@@ -24,7 +24,7 @@ Token payload can be any arbitrary data such as string containing an email
 address.
 
 ```javascript
-/* 32 character secret key */
+/* 32 byte secret key */
 const key = "supersecretkeyyoushouldnotcommit";
 const branca = require("branca")(key);
 
