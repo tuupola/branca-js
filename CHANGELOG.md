@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
 
+## [0.4.0](https://github.com/tuupola/branca-js/compare/v0.3.0...master) - unreleased
+### Added
+- New test vectors from the spec ([#11](https://github.com/tuupola/branca-js/pull/11)).
+
 ## [0.3.0](https://github.com/tuupola/branca-js/compare/v0.2.0...v0.3.0) - 2019-02-03
 ### Added
 - Helper function to extract timestamp from the token ([#4](https://github.com/tuupola/branca-js/pull/4)).
