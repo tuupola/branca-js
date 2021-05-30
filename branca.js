@@ -5,15 +5,38 @@ const NONCE_BYTES = 24;
 const HEADER_BYTES = 29;
 const HEADER_FORMAT = ">B(version)L(timestamp)BBBBBBBBBBBBBBBBBBBBBBBB(nonce)";
 
+// Hex string of 32 bytes (2 hex chars each byte)
+// with an allowed 0x prefix.
+const HEX_REGEX = /^(?:(0x)*([A-Fa-f0-9]{2}){32})$/i
+const HEX_0x_REGEX = /^0x/i
+
 const base62 = require("base-x")(BASE62)
 const bufferpack = require("bufferpack");
 const sodium = require("libsodium-wrappers");
 
 let Branca = function (key) {
     this.version = 0xBA;
-    this.key = Buffer.from(key);
+
+    // Handle a 'key' submitted as either:
+    //   - 32 byte Hex ('0x' prefix optional), should be used for all new keys
+    //   - plain string with length of 32 chars (less secure but backwards compatible with test vectors)
+    if (HEX_REGEX.test(key)) {
+        // Strip leading Hex '0x'
+        if (HEX_0x_REGEX.test(key)) {
+            key = key.substring(2)
+        }
+
+        this.key = Buffer.from(key, 'hex');
+    } else {
+      this.key = Buffer.from(key);
+    }
+
     /* Used only for unit testing. */
     this._nonce = null;
+
+    if (!this.key || this.key.length !== sodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES) {
+        throw new Error(`Invalid key length. Expected ${sodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES}, got ${this.key.length}`);
+    }
 };
 
 Branca.prototype.encode = function (message, timestamp) {

@@ -1,7 +1,35 @@
 "use strict";
 
 const test = require("tape");
+
+// 32 character string key
 const branca = require("./branca")("supersecretkeyyoushouldnotcommit");
+
+// 32 byte hex key
+const branca32 = require("./branca")("deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef");
+
+// 32 byte hex key with '0x' prefix
+const branca32x = require("./branca")("0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef");
+
+/* 32 Byte Hex Key Tests */
+
+test("32 byte hex key with no 0x prefix", function (tape) {
+    tape.plan(2);
+    let token = "BsGNi1RfikO69QizziIfhT4DxChwxjB4TkLPOW4Gx67lds705gFcwdyeVWqkyXKc2Zg1Wc0IRSpBKlJCzZHz6QjVa";
+    let message = branca32.decode(token);
+    let timestamp = branca32.timestamp(token);
+    tape.equal(message.toString(), "Hello 32 Byte Hex Key");
+    tape.equal(timestamp, 0);
+});
+
+test("32 byte hex key with 0x prefix ignored", function (tape) {
+    tape.plan(2);
+    let token = "BsGNi1RfikO69QizziIfhT4DxChwxjB4TkLPOW4Gx67lds705gFcwdyeVWqkyXKc2Zg1Wc0IRSpBKlJCzZHz6QjVa";
+    let message = branca32x.decode(token);
+    let timestamp = branca32x.timestamp(token);
+    tape.equal(message.toString(), "Hello 32 Byte Hex Key");
+    tape.equal(timestamp, 0);
+});
 
 /* Decoding tests */
 
@@ -158,14 +186,21 @@ test("Wrong key", function (tape) {
     }, Error)
 });
 
-test("Invalid key", function (tape) {
+test("Invalid key (too short)", function (tape) {
     tape.plan(1);
 
-    let branca3 = require("./branca")("tooshortkey");
-    let token = "870S4BYxgHw0KnP3W9fgVUHEhT5g86vJ17etaC5Kh5uIraWHCI1psNQGv298ZmjPwoYbjDQ9chy2z";
+    tape.throws(function () {
+        // fails on initialization
+        let branca = require("./branca")("tooshortkey");
+    }, Error)
+});
+
+test("Invalid hex key (too short)", function (tape) {
+    tape.plan(1);
 
     tape.throws(function () {
-        let message = branca3.decode(token);
+        // fails on initialization
+        let branca = require("./branca")("deadbeef");
     }, Error)
 });
 
@@ -293,4 +328,62 @@ test("test should create token with empty payload", function (tape) {
     let token = branca.encode("");
     let message = branca.decode(token);
     tape.equal(message.toString(), "");
+});
+
+/* Examples Tests */
+
+test("test email example", function (tape) {
+    tape.plan(2);
+
+    const msg = "tuupola@appelsiini.net"
+
+    // Generate a token on the fly
+    const token = branca.encode(msg);
+    console.log("example email token", token);
+    
+    const payload = branca.decode(token);
+    tape.equal(payload.toString(), msg);
+
+    // test token from README
+    const payload2 = branca.decode('n8EQdroaT1Kr6pJQ6vWDIUlzY6A1pIWMqUk6NJ1WfYzmhWehep70ZQxaDiKFdQuUmH5DoRX9EkfdEvdllfwVsVm48L');
+    tape.equal(payload2.toString(), msg);
+});
+
+test("test json example", function (tape) {
+    tape.plan(2);
+
+    const msg = {"scope": ["read", "write", "delete"]}
+    const json = JSON.stringify(msg);
+
+    // Generate a token on the fly
+    const token = branca.encode(json);
+    console.log("example json token", token);
+    
+    const payload = JSON.parse(branca.decode(token));
+    tape.equal(JSON.stringify(payload), json);
+
+    // test token from README
+    const payload2 = JSON.parse(branca.decode('5R9jcYzm4xmeAkjbWE7yCER2Y0PIFvXyS3bqkzMfFgPi9FNiw8MaFStIqPDu22yCXalFnYyuiweOmHQ8Y903fAX9cCYYAPiIcBpOLR6aAc7b'));
+    tape.equal(JSON.stringify(payload2), json);
+});
+
+test("test mesgpack example", function (tape) {
+    tape.plan(2);
+
+    const msg = {"scope": ["read", "write", "delete"]}
+
+    // Generate a token on the fly
+    const msgpack = require("msgpack5")();
+    const packed = msgpack.encode(msg);
+    const token = branca.encode(packed);
+    console.log("example msgpack token", token);
+    
+    const binary = branca.decode(token);
+    const payload = msgpack.decode(Buffer.from(binary));
+    tape.equal(JSON.stringify(payload), JSON.stringify(msg));
+
+    // test token from README
+    const binary2 = branca.decode('3iLBybBOHSPyOpoOYado2s4BE5VswdiPOgSPMfx8FVgam9yYXUEQOvMFGDGAEIh9zoeS9eT1K4fjVicjlGVkJdZzkCX5CroY');
+    const payload2 = msgpack.decode(Buffer.from(binary2));
+    tape.equal(JSON.stringify(payload2), JSON.stringify(msg));
 });
