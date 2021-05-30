@@ -32,7 +32,7 @@ const token = branca.encode("tuupola@appelsiini.net");
 console.log(token);
 
 /*
-TYfc6x7g8HiQf9HMkPwXC33UKwESCiBHrnVbb6AjDTaRR5oDxt3bK8kyiEyyc8HDqfnukQlMHT
+n8EQKqlCANDtLrAuVl4zlAHBH2RpR2KpDpQFzDH6AvrBNvqPGej7rlUAQwNvdKJ7vZEVX2EXN54zTn1JN8HtwxDqiA
 */
 
 const payload = branca.decode(token);
@@ -41,6 +41,28 @@ console.log(payload.toString());
 /* tuupola@appelsiini.net */
 
 ```
+
+You can also use hex encoded secret keys.
+
+```javascript
+/* 32 byte secret key */
+const key = Buffer.from("7ed049e344f73f399ba1f7868cf9494f4b13347ecce02a8e463feb32507b73a5", "hex");
+const branca = require("branca")(key);
+
+const token = branca.encode("tuupola@appelsiini.net");
+console.log(token);
+
+/*
+n8EQKt90ayFVXUlTFvj4ToPvJFmTT9ACV9IlR4qGGcIi3LThKnbacHn0N08hSG0PTTHRbLQTzc3vlvyqRZ5Te80G8w
+*/
+
+const payload = branca.decode(token);
+console.log(payload.toString());
+
+/* tuupola@appelsiini.net */
+
+```
+
 
 Sometimes you might prefer JSON.
 
