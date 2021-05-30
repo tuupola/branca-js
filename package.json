@@ -18,6 +18,7 @@
   },
   "devDependencies": {
     "istanbul": "^0.4.5",
+    "msgpack5": "^5.3.2",
     "tape": "^4.7.0"
   },
   "scripts": {
