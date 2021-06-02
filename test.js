@@ -1,7 +1,7 @@
 "use strict";
 
 const test = require("tape");
-const branca = require("./branca")("supersecretkeyyoushouldnotcommit");
+const branca = require("./branca")("73757065727365637265746b6579796f7573686f756c646e6f74636f6d6d6974");
 
 /* Decoding tests */
 
@@ -150,7 +150,7 @@ test("Modified last byte of the Poly1305 tag", function (tape) {
 test("Wrong key", function (tape) {
     tape.plan(1);
 
-    let branca2 = require("./branca")("wrongsecretkeyyoushouldnotcommit");
+    let branca2 = require("./branca")("deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef");
     let token = "870S4BYxgHw0KnP3W9fgVUHEhT5g86vJ17etaC5Kh5uIraWHCI1psNQGv298ZmjPwoYbjDQ9chy2z";
 
     tape.throws(function () {
@@ -158,14 +158,19 @@ test("Wrong key", function (tape) {
     }, Error)
 });
 
-test("Invalid key", function (tape) {
+test("Invalid key (too short)", function (tape) {
     tape.plan(1);
 
-    let branca3 = require("./branca")("tooshortkey");
-    let token = "870S4BYxgHw0KnP3W9fgVUHEhT5g86vJ17etaC5Kh5uIraWHCI1psNQGv298ZmjPwoYbjDQ9chy2z";
+    tape.throws(function () {
+        let branca = require("./branca")("deadbeef");
+    }, Error)
+});
+
+test("Invalid key (too long)", function (tape) {
+    tape.plan(1);
 
     tape.throws(function () {
-        let message = branca3.decode(token);
+        let branca = require("./branca")("deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef");
     }, Error)
 });
 
@@ -281,6 +286,17 @@ test("test expired token", function (tape) {
 
 test("test defaults", function (tape) {
     tape.plan(1);
+
+    let token = branca.encode("Hello world!");
+    let message = branca.decode(token);
+    tape.equal(message.toString(), "Hello world!");
+});
+
+test("test Buffer as key", function (tape) {
+    tape.plan(1);
+
+    let key = Buffer.from("beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef", "hex")
+    let brancaBuf = require("./branca")(key);
 
     let token = branca.encode("Hello world!");
     let message = branca.decode(token);

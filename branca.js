@@ -11,13 +11,23 @@ const sodium = require("libsodium-wrappers");
 
 let Branca = function (key) {
     this.version = 0xBA;
-    this.key = Buffer.from(key);
+
+    /* https://github.com/Microsoft/TypeScript/issues/14107 */
+    if (typeof key === "string") {
+        key = Buffer.from(key, "hex");
+    }
+    this.key = key;
+
     /* Used only for unit testing. */
     this._nonce = null;
+
+    /* Secret key must be 32 bytes */
+    if (!this.key || this.key.length !== sodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES) {
+        throw new Error(`Invalid key length. Expected ${sodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES}, got ${this.key.length}`);
+    }
 };
 
 Branca.prototype.encode = function (message, timestamp) {
-
     let nonce;
 
     if (this._nonce) {
