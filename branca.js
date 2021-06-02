@@ -11,7 +11,13 @@ const sodium = require("libsodium-wrappers");
 
 let Branca = function (key) {
     this.version = 0xBA;
-    this.key = Buffer.from(key, "hex");
+
+    /* https://github.com/Microsoft/TypeScript/issues/14107 */
+    if (typeof key === "string") {
+        key = Buffer.from(key, "hex");
+    }
+    this.key = key;
+
     /* Used only for unit testing. */
     this._nonce = null;
 

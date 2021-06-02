@@ -292,6 +292,17 @@ test("test defaults", function (tape) {
     tape.equal(message.toString(), "Hello world!");
 });
 
+test("test Buffer as key", function (tape) {
+    tape.plan(1);
+
+    let key = Buffer.from("beefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeefbeef", "hex")
+    let brancaBuf = require("./branca")(key);
+
+    let token = branca.encode("Hello world!");
+    let message = branca.decode(token);
+    tape.equal(message.toString(), "Hello world!");
+});
+
 test("test should create token with empty payload", function (tape) {
     tape.plan(1);
 
