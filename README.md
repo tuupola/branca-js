@@ -18,63 +18,74 @@ $ yarn add branca
 $ npm install branca
 ```
 
-## Usage
+## Secret key
+
+The token is encrypted using a 32 byte secret key. You can pass the secret key either as an instance of `Buffer` or a hex encoded string.
+
+```javascript
+const key = crypto.randomBytes(32);
+const branca = require("branca")(key);
+```
+
+```javascript
+const key = "7ed049e344f73f399ba1f7868cf9494f4b13347ecce02a8e463feb32507b73a5";
+const branca = require("branca")(key);
+```
+
+While technically possible, you should not use human readable strings as the secret key. Instead always generate the key using cryptographically secure random bytes. You can do this, for example, from commandline with Node.js itself or openssl.
+
+```
+$ node
+Welcome to Node.js v16.2.0.
+Type ".help" for more information.
+> crypto.randomBytes(32).toString("hex")
+'46cad3699da5766c45e80edfbf19dd2debc311e0c9046a80e791597442b2daf0'
+```
+
+```
+$ openssl rand -hex 32
+
+29f7d3a263bd6fcfe716865cbdb00b7a317d1993b8b7a3a5bae6192fbe0ace65
+```
+
+## Payload
 
 Token payload can be any arbitrary data such as string containing an email
 address.
 
 ```javascript
 /* 32 byte secret key */
-const key = "supersecretkeyyoushouldnotcommit";
+const crypto = require("crypto");
+const key = crypto.randomBytes(32);
 const branca = require("branca")(key);
 
 const token = branca.encode("tuupola@appelsiini.net");
 console.log(token);
 
 /*
-n8EQKqlCANDtLrAuVl4zlAHBH2RpR2KpDpQFzDH6AvrBNvqPGej7rlUAQwNvdKJ7vZEVX2EXN54zTn1JN8HtwxDqiA
+n8EWZ6msHPjbUPLfezL7g00RBNDvHZ37Or4aGeIWqPjUj0Sht41dasPgQgmEl3UsV4JKS4kZtEiZ6V54JYtYJRhtH8
 */
 
 const payload = branca.decode(token);
 console.log(payload.toString());
 
 /* tuupola@appelsiini.net */
-
 ```
-
-You can also use hex encoded secret keys.
-
-```javascript
-/* 32 byte secret key */
-const key = Buffer.from("7ed049e344f73f399ba1f7868cf9494f4b13347ecce02a8e463feb32507b73a5", "hex");
-const branca = require("branca")(key);
-
-const token = branca.encode("tuupola@appelsiini.net");
-console.log(token);
-
-/*
-n8EQKt90ayFVXUlTFvj4ToPvJFmTT9ACV9IlR4qGGcIi3LThKnbacHn0N08hSG0PTTHRbLQTzc3vlvyqRZ5Te80G8w
-*/
-
-const payload = branca.decode(token);
-console.log(payload.toString());
-
-/* tuupola@appelsiini.net */
-
-```
-
 
 Sometimes you might prefer JSON.
 
 ```javascript
-const key = "supersecretkeyyoushouldnotcommit";
+/* 32 byte secret key */
+const crypto = require("crypto");
+const key = crypto.randomBytes(32);
 const branca = require("branca")(key);
+
 const json = JSON.stringify({"scope": ["read", "write", "delete"]});
 const token = branca.encode(json);
 console.log(token);
 
 /*
-3Gq57osRXk7UsZsqzLuLOoHYj2VgrGvhkETjZ4J1ftW7zhALYFUol2jDyxYtmrqJfi5DbKx7BqIptfeaoN2yadmJxSIx
+5R9kHEyH57WbQhy0Ba3NwPYu0pFlAv45jOIsmUdvHs0HAVX3CzNw90DtXs60UwjwfYopZ1NvO11GkEQTjumMIZYuCcawnoztFsexGlHoFKGX
 */
 
 const payload = JSON.parse(branca.decode(token));
@@ -86,7 +97,9 @@ console.log(payload);
 You can keep the token size small by using a space efficient serialization method such as [MessagePack](http://msgpack.org/) or [Protocol Buffers](https://developers.google.com/protocol-buffers/).
 
 ```javascript
-const key = "supersecretkeyyoushouldnotcommit";
+/* 32 byte secret key */
+const crypto = require("crypto");
+const key = crypto.randomBytes(32);
 const branca = require("branca")(key);
 const msgpack = require("msgpack5")();
 
