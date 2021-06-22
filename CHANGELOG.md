@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file, in reverse 
 ### Added
 - New test vectors from the spec ([#11](https://github.com/tuupola/branca-js/pull/11)).
 
+### Removed
+- Support for ASCII secret keys ([#16](https://github.com/tuupola/branca-js/pull/16)) (fixes [#12](https://github.com/tuupola/branca-js/issues/12)).
+
 ## [0.3.0](https://github.com/tuupola/branca-js/compare/v0.2.0...v0.3.0) - 2019-02-03
 ### Added
 - Helper function to extract timestamp from the token ([#4](https://github.com/tuupola/branca-js/pull/4)).
