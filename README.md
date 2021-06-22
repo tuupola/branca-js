@@ -50,7 +50,7 @@ $ openssl rand -hex 32
 29f7d3a263bd6fcfe716865cbdb00b7a317d1993b8b7a3a5bae6192fbe0ace65
 ```
 
-To keep things simple, rest of the examples generate the secret key on the fly. In real life the application would load the secret key from outside external key store. External here meaning outside of the application code. How to store and load secret keys in beyond the scope of this library.
+To keep things simple, rest of the examples generate the secret key on the fly. In real life the application would load the secret key from external key store. External here meaning outside of the application code. How to store and load secret keys in beyond the scope of this library.
 
 ## Payload
 
