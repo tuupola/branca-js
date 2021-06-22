@@ -20,7 +20,9 @@ $ npm install branca
 
 ## Secret key
 
-The token is encrypted using a 32 byte secret key. You can pass the secret key either as an instance of `Buffer` or a hex encoded string.
+The token is encrypted using a 32 byte secret key. As the name implies this key should be kept a secret. **Do not commit it to version control nor make it publicly available**.
+
+You can pass the secret key either as an instance of `Buffer` or a hex encoded string.
 
 ```javascript
 const key = crypto.randomBytes(32);
@@ -48,9 +50,11 @@ $ openssl rand -hex 32
 29f7d3a263bd6fcfe716865cbdb00b7a317d1993b8b7a3a5bae6192fbe0ace65
 ```
 
+To keep things simple rest, of the examples generate the secret key on the fly. In real life the application would load the secret key from outside of the application code. How to store and load secret keys in beyond scope of this library.
+
 ## Payload
 
-Token payload can be any arbitrary data such as string containing an email
+Token payload can be any arbitrary data such as a string containing an email
 address.
 
 ```javascript
