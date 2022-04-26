@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
 
+## [0.4.1](https://github.com/tuupola/branca-js/compare/v0.4.0...master) - unreleased
+### Fixed
+- Replaced Travis with GitHub actions ([#20](https://github.com/tuupola/branca-js/pull/20)).
+
 ## [0.4.0](https://github.com/tuupola/branca-js/compare/v0.3.0...v0.4.0) - 2020-06-21
 ### Added
 - New test vectors from the spec ([#11](https://github.com/tuupola/branca-js/pull/11)).
