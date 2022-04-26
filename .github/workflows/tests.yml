@@ -28,3 +28,4 @@ jobs:
     - run: npm install
     - run: npm run build --if-present
     - run: npx nyc tape test.js
+    - run: npx -y codecov
