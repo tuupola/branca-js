@@ -17,10 +17,9 @@
     "libsodium-wrappers": "^0.5.2"
   },
   "devDependencies": {
-    "istanbul": "^0.4.5",
     "tape": "^4.7.0"
   },
   "scripts": {
-    "test": "node_modules/istanbul/lib/cli.js cover node_modules/tape/bin/tape test.js"
+    "test": "npx nyc tape test.js"
   }
 }
