@@ -12,7 +12,7 @@
     "branca.js"
   ],
   "dependencies": {
-    "base-x": "^3.0.2",
+    "base-x": "^4.0.0",
     "bufferpack": "^0.0.6",
     "libsodium-wrappers": "^0.5.2"
   },
