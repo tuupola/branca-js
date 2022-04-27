@@ -284,6 +284,16 @@ test("test expired token", function (tape) {
     }, Error)
 });
 
+test("test non or partial token", function (tape) {
+    tape.plan(1);
+
+    let token = "invalidtoken";
+
+    tape.throws(function () {
+        let message = branca.decode(token, 3600);
+    }, Error)
+});
+
 test("test defaults", function (tape) {
     tape.plan(1);
 

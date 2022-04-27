@@ -63,6 +63,11 @@ Branca.prototype.decode = function (token, ttl) {
     let header = binary.slice(0, HEADER_BYTES);
     let ciphertext = binary.slice(HEADER_BYTES, binary.length);
     let unpacked = bufferpack.unpack(HEADER_FORMAT, header);
+    
+    if (undefined === unpacked) {
+      throw new Error("This token is not valid or is corrupted");
+    }
+    
     let version = unpacked.shift();
     let timestamp = unpacked.shift();
     let nonce = Buffer.from(unpacked);
