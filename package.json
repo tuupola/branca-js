@@ -17,7 +17,7 @@
     "libsodium-wrappers": "^0.5.2"
   },
   "devDependencies": {
-    "tape": "^4.7.0"
+    "tape": "^5.5.0"
   },
   "scripts": {
     "test": "npx nyc tape test.js"
