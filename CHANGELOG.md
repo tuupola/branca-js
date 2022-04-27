@@ -3,9 +3,11 @@
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
 
-## [0.4.1](https://github.com/tuupola/branca-js/compare/v0.4.0...master) - unreleased
-### Fixed
+## [0.5.0](https://github.com/tuupola/branca-js/compare/v0.4.0...master) - unreleased
+### Changed
 - Replaced Travis with GitHub actions ([#20](https://github.com/tuupola/branca-js/pull/20)).
+- Upgraded base-x and tape ([#22](https://github.com/tuupola/branca-js/pull/22)).
+
 
 ## [0.4.0](https://github.com/tuupola/branca-js/compare/v0.3.0...v0.4.0) - 2020-06-21
 ### Added
